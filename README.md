@@ -32,7 +32,7 @@ NucJuke is a lightweight web tool for re-ranking gRNAs to be used in CRISPR-Cas9
 **Code Information
 
 File Tree for Processing Query (assuming good input):
-
+<pre>
    Home >>> query.php >>> results.php
   ($userInput)     ^	($results //frm. processed user input)
 	           ^
@@ -43,7 +43,7 @@ File Tree for Processing Query (assuming good input):
 				    ^
 			          loadMaps.php <<< read/  parsedRedunMap.txt  uniqueMap.txt
 
-
+</pre>
 - if bad input, query passes to oops.php
 
 - basic functionality: to re-rank gRNAs by checking location against location of known nucleosomes in two nuc maps
