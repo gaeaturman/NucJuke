@@ -1,6 +1,6 @@
 # NucJuke
 
-@author gaeaturman, WWU academic tools 2019
+WWU academic tools 2019
 NucJuke is a lightweight web tool for re-ranking gRNAs to be used in CRISPR-Cas9 experiments in yeast.
 
 **Files
