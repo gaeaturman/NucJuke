@@ -1,4 +1,5 @@
 <?php
+ini_set('display_errors','off');
 /*
 query.php
 intermediate for home and results, takes user input gRNAs and site/sorting information, checks gRNA positions
@@ -60,7 +61,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	#process user given grnas, filter, and return results
 	$process = new processgivengrnas($siteSelection, $userInput, $filterMethod);
 	$process->parseGRNAs();
-
 
 	$results = $process->returnAllResults();
 

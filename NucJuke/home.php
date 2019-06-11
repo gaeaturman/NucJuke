@@ -1,5 +1,6 @@
 <?php
 $pageTitle = "Home";
+error_log("NucJuke - Start of Error Log");
 include("inc/header.php");
 ?>
 

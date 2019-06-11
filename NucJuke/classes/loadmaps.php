@@ -1,4 +1,5 @@
 <?php
+ini_set('display_errors','off');
 /*
 loadmaps class for loading in nuclesome map data,
 
@@ -128,7 +129,7 @@ class loadmaps {
 				$chromBP = (float)$chromBP;
 				$keyVal = strval($chromBP);
 
-				$rank = intval($data[4]);
+				$rank = (float)$data[3]; //intval(data[4])
 
 				$this->lenientNucs[$keyVal] = $rank;
 			}

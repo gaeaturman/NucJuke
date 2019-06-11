@@ -34,7 +34,7 @@
         </div>
         <hr/>
         <div id="head" align="middle">
-            <h5>A tool for re-ranking gRNAs based on chromatin accessiblity for CRISPR-Cas9 Experiments in yeast.</h5> <!-- issue to fix later, wrapping in link-->
+            <h5>A tool for re-ranking gRNAs based on chromatin accessibility for CRISPR-Cas9 Experiments in yeast.</h5> <!-- issue to fix later, wrapping in link-->
         </div>
         <hr/>
     </section>

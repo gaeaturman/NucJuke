@@ -1,4 +1,5 @@
 <?php
+ini_set('display_errors','off');
 /*
 processgivengrnas class for loading in nuclesome map data, takes in user given
 $siteSelection, $userInput, and $filterMethod
@@ -8,16 +9,16 @@ private $siteSelection - user input $siteSelection taken in by constructor
 private $userInput - user input $userInpur (gRNAs) taken in by constructor
 private $filterMethod - user input $filterMethod taken in by constructor
 
-private $resultsFullOc - array of full occupied gRNAs
+private $resultsFullOcc - array of full occupied gRNAs
 private $resultsPrtOcc -  array of partially occupied gRNAs
-private $resultsUnOc -  array of unoccupied gRNAs
+private $resultsUnOcc -  array of unoccupied gRNAs
 
 functions value() and romanToDec() take in a string representing a number in roman numeral format,
 and returns an int of the corresponding value
 
 function parsegrnas() takes user input strings and performs various splits to get gRNA information,
 splits dependent on $siteSelection. Calls filter.php to filter given gRNAs and puts them into result arrs
-$resultsFullOc, $resultsPrtOcc, and $resultsUnOc
+$resultsFullOcc, $resultsPrtOcc, and $resultsUnOcc
 
 function returnAllResults() returns an array of the results in the order:
 unoccupied gRNAs [0], part occupied gRNAs [1], full occupied gRNAs [2]
@@ -31,9 +32,9 @@ class processgivengrnas {
 	private $userInput;
 	private $filterMethod;
 
-	private $resultsFullOc = array();
-	private $resultsPrtOcc = array();
-	private $resultsUnOc = array();
+	private $resultsFullOcc;
+	private $resultsPrtOcc;
+	private $resultsUnOcc;
 
 	#Constructor
 	function __construct($siteSelection, $userInput, $filterMethod) {
@@ -233,14 +234,14 @@ class processgivengrnas {
 
 		$resultsArr = $filter->returnResults();
 
-		$this->resultsFullOc = $resultsArr[0];
+		$this->resultsFullOcc = $resultsArr[0];
 		$this->resultsPrtOcc = $resultsArr[1];
-		$this->$resultsUnOc = $resultsArr[2];
+		$this->resultsUnOcc = $resultsArr[2];
 
 	}
 
 	function returnAllResults() {
-		$resultsArr = array($this->resultsFullOc, $this->resultsPrtOcc, $this->$resultsUnOc);
+		$resultsArr = array($this->resultsFullOcc, $this->resultsPrtOcc, $this->resultsUnOcc);
 		return $resultsArr;
 	}
 }
