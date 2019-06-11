@@ -1,4 +1,6 @@
 <?php
+ini_set('display_errors','off');
+
 /*
 gRNA class for storing gRNA info,
 
@@ -37,7 +39,7 @@ class grna
       $this->occupied = false;
       $this->nucRank = -1;
       $this->finalRank = -1;
-	  $this->$otherInfo = "";
+	  $this->otherInfo = "";
 	}
 
 	#Getters
@@ -78,13 +80,13 @@ class grna
 
 	public function getOtherInfo()
 	{
-		return $this->$otherInfo;
+		return $this->otherInfo;
 	}
 
 	public function returnInfo()
 	{
-		return '\t' . $this->designRank . "\t" . $this->finalRank . "\t" . $this->sequence . "\t" . $this->onChrom . "\t" . $this->startLoc . "\t" . $this->$otherInfo;
-	}
+		return '\t' . $this->designRank . "\t" . $this->finalRank . "\t" . $this->sequence . "\t" . $this->onChrom . "\t" . $this->startLoc . "\t" . $this->otherInfo;
+	} 
 
 	#Setters
 	public function setOccupied()
@@ -104,7 +106,7 @@ class grna
 
 	public function setOtherInfo($newOtherInfo)
 	{
-		$this->$otherInfo = $newOtherInfo;
+		$this->otherInfo = $newOtherInfo;
 	}
 
 

@@ -69,7 +69,6 @@ for ($c = 0; $c < count($resFull); $c++) {
     <th rowspan="2"><?php echo "Sequence"; ?></th>
     <th rowspan="2"><?php echo "Chromosome"; ?></th>
     <th rowspan="2"><?php echo "Location"; ?></th>
-    <th rowspan="2"><?php echo "Exon"; ?></th>
     <th rowspan="2"><?php echo "Strand"; ?></th>
     <th rowspan="2"><?php echo "GC %"; ?></th>
     <th rowspan="2"><?php echo "Self Complementary"; ?></th>
@@ -97,7 +96,6 @@ for ($c = 0; $c < count($resFull); $c++) {
     <td>&emsp;<?php echo $Un[$i][10]; ?>&nbsp;</td>
     <td>&emsp;<?php echo $Un[$i][11]; ?>&nbsp;</td>
     <td>&emsp;<?php echo $Un[$i][12]; ?>&nbsp;</td>
-    <td>&emsp;<?php echo $Un[$i][13]; ?>&nbsp;</td>
   </tr>
 <?php } ?>
 </table>
@@ -110,7 +108,6 @@ for ($c = 0; $c < count($resFull); $c++) {
       <th rowspan="2"><?php echo "Sequence"; ?></th>
       <th rowspan="2"><?php echo "Chromosome"; ?></th>
       <th rowspan="2"><?php echo "Location"; ?></th>
-      <th rowspan="2"><?php echo "Exon"; ?></th>
       <th rowspan="2"><?php echo "Strand"; ?></th>
       <th rowspan="2"><?php echo "GC %"; ?></th>
       <th rowspan="2"><?php echo "Self Complementary"; ?></th>
@@ -138,7 +135,6 @@ for ($c = 0; $c < count($resFull); $c++) {
         <td>&emsp;<?php echo $Prt[$j][10]; ?>&nbsp;</td>
         <td>&emsp;<?php echo $Prt[$j][11]; ?>&nbsp;</td>
         <td>&emsp;<?php echo $Prt[$j][12]; ?>&nbsp;</td>
-        <td>&emsp;<?php echo $Prt[$j][13]; ?>&nbsp;</td>
     </tr>
 <?php } ?>
 </table>
@@ -151,7 +147,6 @@ for ($c = 0; $c < count($resFull); $c++) {
       <th rowspan="2"><?php echo "Sequence"; ?></th>
       <th rowspan="2"><?php echo "Chromosome"; ?></th>
       <th rowspan="2"><?php echo "Location"; ?></th>
-      <th rowspan="2"><?php echo "Exon"; ?></th>
       <th rowspan="2"><?php echo "Strand"; ?></th>
       <th rowspan="2"><?php echo "GC %"; ?></th>
       <th rowspan="2"><?php echo "Self Complementary"; ?></th>
@@ -179,7 +174,6 @@ for ($c = 0; $c < count($resFull); $c++) {
         <td>&emsp;<?php echo $Full[$k][10]; ?>&nbsp;</td>
         <td>&emsp;<?php echo $Full[$k][11]; ?>&nbsp;</td>
         <td>&emsp;<?php echo $Full[$k][12]; ?>&nbsp;</td>
-        <td>&emsp;<?php echo $Full[$k][13]; ?>&nbsp;</td>
     </tr>
     <?php } ?>
 </table>
@@ -398,13 +392,12 @@ for ($c = 0; $c < count($resFull); $c++) {
     <?php } ?>
 </table>
 </div>
-<?php } else {
-    echo "Bad site selection, how'd you do that?";
-}?>
+<?php } ?>
 <div id="padder">
 </div>
   </section>
 
   <?php
   include("inc/footer.php");
+  error_log("NucJuke - End of Error Log");
   ?>

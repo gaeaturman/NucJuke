@@ -1,4 +1,5 @@
 <?php
+ini_set('display_errors','off');
 /*
 filter class for loading in nuclesome map data, takes in $gRNAInfo and $filterMethod
 
@@ -101,82 +102,168 @@ class filter {
 		$curChrLocS = "";
 		$curChrLocD = (double)0.0;
 
-		foreach (range($location-10, $location+10) as $nums) {
-	        $curChrLocD = $strChr . "." . $nums;
+		foreach (range($location-73, $location+73) as $nums) { //set bounds for nuclesome +/- frm center
+			$curChrLocD = $strChr . "." . $nums;
 			$curChrLocD = (float)$curChrLocD;
-	        array_push($allLocs, strval($curChrLocD));
-	    }
+			array_push($allLocs, strval($curChrLocD));
+		}
 		return $allLocs;
 	}
 
 
 	function getFullOcc() {
+		$filterMethod = $this->filterMethod;
 
+		if ($filterMethod == "dynamic") {
+			for ($i = 0; $i < count($this->gRNAInfo); $i++) {
+				$curr = clone $this->gRNAInfo[$i];
+				$onChr = $curr->getChrom();
+				$locBP = $curr->returnLoc();
 
+				$possOccSites = $this->getOccRange($onChr, $locBP);
+
+				for ($j = 0; $j < 147; $j++) { //toggle, 21 or 147
+
+					if (array_key_exists($possOccSites[$j],$this->strictNucs)){
+
+						$setKey = array_search($curr, $this->gRNAInfo);
+
+						unset($this->gRNAInfo[$setKey]);
+						$this->gRNAInfo = array_values($this->gRNAInfo);
+						$curr->setOccupied();
+						array_push($this->gRNAfullOcc, $curr);
+						break;
+
+					}
+				}
+			}
+		} elseif ($filterMethod == "strict") {
+
+			for ($i = 0; $i < count($this->gRNAInfo); $i++) {
+				$curr = clone $this->gRNAInfo[$i];
+				$designRank = $curr->getDesignRank();
+				$onChr = $curr->getChrom();
+				$locBP = $curr->returnLoc();
+
+				$possOccSites = $this->getOccRange($onChr, $locBP);
+
+				for ($j = 0; $j < 147; $j++) { //toggle, 21 or 147
+
+					if (array_key_exists($possOccSites[$j],$this->strictNucs)){
+
+						$setKey = array_search($curr, $this->gRNAInfo);
+
+						unset($this->gRNAInfo[$setKey]);
+						$this->gRNAInfo = array_values($this->gRNAInfo);
+						$curr->setOccupied();
+						$this->gRNAfullOcc[$designRank] = $curr;
+						//array_push($this->gRNAfullOcc[$designRank], $curr);
+						break;
+
+					}
+				}
+			}
+		}
+	}
+
+	function getOtherFullOcc() {
 		for ($i = 0; $i < count($this->gRNAInfo); $i++) {
 			$curr = clone $this->gRNAInfo[$i];
+			$designRank = $curr->getDesignRank();
 			$onChr = $curr->getChrom();
 			$locBP = $curr->returnLoc();
 
 			$possOccSites = $this->getOccRange($onChr, $locBP);
 
-			for ($j = 0; $j < 21; $j++) {
+			for ($j = 0; $j < 147; $j++) { //toggle, 21 or 147
 
-				if (array_key_exists($possOccSites[$j],$this->strictNucs)){
+				if (array_key_exists($possOccSites[$j],$this->lenientNucs)){
 
 					$setKey = array_search($curr, $this->gRNAInfo);
 
 					unset($this->gRNAInfo[$setKey]);
 					$this->gRNAInfo = array_values($this->gRNAInfo);
 					$curr->setOccupied();
-					array_push($this->gRNAfullOcc, $curr);
+					$this->gRNAfullOcc[$designRank] = $curr;
 					break;
-
 				}
-
 			}
-
 		}
+		ksort($this->gRNAfullOcc);
+		$this->gRNAfullOcc = array_values($this->gRNAfullOcc);
 	}
 
-
 	function getPartOcc() {
+		$filterMethod = $this->filterMethod;
 
-		for ($k = 0; $k < count($this->gRNAInfo); $k++) {
+		if ($filterMethod == "lenient") {
+			for ($k = 0; $k < count($this->gRNAInfo); $k++) {
 
-			$curr = clone $this->gRNAInfo[$k];
-			$onChr = $curr->getChrom();
-			$locBP = $curr->returnLoc();
+				$curr = clone $this->gRNAInfo[$k];
+				$onChr = $curr->getChrom();
+				$locBP = $curr->returnLoc();
 
-			$possOccSites = $this->getOccRange($onChr, $locBP);
-
-
-			for ($l = 0; $l < 21; $l++) {
-
+				$possOccSites = $this->getOccRange($onChr, $locBP);
 
 
-				if (array_key_exists($possOccSites[$l],$this->lenientNucs)){
-				/*
-				if (isset($this->lenientNucs[$possOccSites[$l]])) {
-				*/
-					$setKey = array_search($curr, $this->gRNAInfo);
+				for ($l = 0; $l < 147; $l++) {
 
-					unset($this->gRNAInfo[$setKey]);
-					$this->gRNAInfo = array_values($this->gRNAInfo);
+					if (array_key_exists($possOccSites[$l],$this->strictNucs)) {
 
-					$currRank = $this->lenientNucs[$possOccSites[$l]];
+						$setKey = array_search($curr, $this->gRNAInfo);
 
-					$curr->setNucRank($currRank);
-					$designRank = $curr->getDesignRank();
-					$finalRank = intval($currRank * $designRank);
-					$curr->setFinalRank($finalRank);
+						unset($this->gRNAInfo[$setKey]);
+						$this->gRNAInfo = array_values($this->gRNAInfo);
 
-					$dubString = strval($finalRank) . "." . strval($designRank);
-					$ranks = strval($dubString);
-					array_push($this->partOccRanks, $ranks);
+						$currRank = $this->strictNucs[$possOccSites[$l]];
 
-					$this->partOccGRNAs[$ranks] = $curr;
-					break;
+						$curr->setNucRank($currRank);
+						$designRank = $curr->getDesignRank();
+						$finalRank = intval($currRank * $designRank);
+						$curr->setFinalRank($finalRank);
+
+						$dubString = strval($finalRank) . "." . strval($designRank);
+						$ranks = strval($dubString);
+						array_push($this->partOccRanks, $ranks);
+
+						$this->partOccGRNAs[$ranks] = $curr;
+						break;
+					}
+				}
+			}
+
+		} elseif ($filterMethod == "dynamic") {
+
+			for ($k = 0; $k < count($this->gRNAInfo); $k++) {
+
+				$curr = clone $this->gRNAInfo[$k];
+				$onChr = $curr->getChrom();
+				$locBP = $curr->returnLoc();
+
+				$possOccSites = $this->getOccRange($onChr, $locBP);
+
+
+				for ($l = 0; $l < 147; $l++) { //toggle, 21 or 147
+
+
+					if (array_key_exists($possOccSites[$l],$this->lenientNucs)){
+
+						$setKey = array_search($curr, $this->gRNAInfo);
+
+						unset($this->gRNAInfo[$setKey]);
+						$this->gRNAInfo = array_values($this->gRNAInfo);
+
+						$currRank = $this->lenientNucs[$possOccSites[$l]];
+						$curr->setNucRank($currRank);
+						$designRank = $curr->getDesignRank();
+						$finalRank = (float)($currRank * $designRank);
+						$curr->setFinalRank($finalRank);
+
+						array_push($this->partOccRanks[(string)$finalRank]=$designRank);
+
+						$this->partOccGRNAs[$designRank] = $curr;
+						break;
+					}
 				}
 			}
 		}
@@ -185,15 +272,16 @@ class filter {
 
 	function partOccReRank() {
 
-		arsort($this->partOccRanks);
-		$this->gRNApartOcc = array();
-		for ($i = 0; $i < count($this->partOccRanks); $i++) {
+		ksort($this->partOccRanks);
 
-			$index = $this->partOccRanks[$i];
+		$this->gRNApartOcc = array();
+		$values = array_values($this->partOccRanks);
+
+		for ($i = 0; $i < count($values); $i++) {
+			$index = (array_values($this->partOccRanks))[$i];
 			$curr = $this->partOccGRNAs[$index];
 			array_push($this->gRNApartOcc, $curr);
 		}
-
 	}
 
 
@@ -234,6 +322,7 @@ class filter {
 	function strictFilter() {
 
 		$this->getFullOcc();
+		$this->getOtherFullOcc();
 
 		$lastunOcc = count($this->gRNAInfo);
 		for ($i = 0; $i < count($this->gRNAInfo); $i++) {
@@ -280,6 +369,7 @@ class filter {
 		$resPrtOc = $this->resultsMid;
 		$resFullOc = $this->resultsBot;
 		$allResults = array($resUnOc, $resPrtOc, $resFullOc);
+		//exit(); //err check - toggle exit(); on/off
 		return $allResults;
 	}
 
